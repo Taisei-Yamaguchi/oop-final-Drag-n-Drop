@@ -1,11 +1,12 @@
 import { projectState } from "./ProjectState.js";
+import {Project} from "../models/project.js";
 
 export class ProjectList {
     templateElement: HTMLTemplateElement;
     hostElement: HTMLDivElement;
     element: HTMLElement;
     private type: 'active' | 'finished'; // Union type
-    assignedProjects: any[] = [];
+    assignedProjects: Project[] = [];
 
 
     constructor(type: 'active' | 'finished') {
@@ -20,7 +21,7 @@ export class ProjectList {
         this.attach();
         this.renderContent();
 
-        projectState.addListener((projects: any[]) => {
+        projectState.addListener((projects: Project[]) => {
             this.assignedProjects = projects;
             this.renderProjects();
         });
