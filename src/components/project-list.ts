@@ -1,5 +1,5 @@
 import { projectState } from "./ProjectState.js";
-import {Project} from "../models/project.js";
+import {ProjectStatus,Project} from "../models/project.js";
 
 export class ProjectList {
     templateElement: HTMLTemplateElement;
@@ -22,7 +22,11 @@ export class ProjectList {
         this.renderContent();
 
         projectState.addListener((projects: Project[]) => {
-            this.assignedProjects = projects;
+            this.assignedProjects = projects.filter((project) =>
+                this.type === 'active'
+                ? project.status === ProjectStatus.Active
+                : project.status === ProjectStatus.Finished
+            );
             this.renderProjects();
         });
     }
