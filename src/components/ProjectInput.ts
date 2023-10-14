@@ -10,6 +10,7 @@
 //     };
 //     return adjustedDescriptor;
 // }
+import { validate, Validatable } from '../helpers/validation.js';
 
 export class ProjectInput {
     templateElement: HTMLTemplateElement;
@@ -63,20 +64,33 @@ export class ProjectInput {
     }
 
     private gatherUserInput(): [string, string, number] | void {
-        const enteredTitle = this.titleInputElement.value;
-        const enteredDescription = this.descriptionInputElement.value;
-        const enteredPeople = +this.peopleInputElement.value;
-    
+        const title: Validatable = {
+            value: this.titleInputElement.value,
+            required: true,
+        };
+
+        const description: Validatable = {
+            value: this.descriptionInputElement.value,
+            required: true,
+        };
+
+        const people: Validatable = {
+            value: +this.peopleInputElement.value,
+            required: true,
+            min: 1,
+            max: 10,
+        };
+
         if (
-            enteredTitle.trim().length === 0 ||
-            enteredDescription.trim().length === 0 ||
-            isNaN(enteredPeople) || enteredPeople <= 0
+            !validate(title) ||
+            !validate(description) ||
+            !validate(people)
         ) {
-            alert("Invalid input, please try again!");
+            alert('Invalid input, please try again!');
             return;
-        } else {
-            return [enteredTitle, enteredDescription, enteredPeople];
         }
+
+        return [this.titleInputElement.value, this.descriptionInputElement.value, +this.peopleInputElement.value];
     }
 
     private clearInputs() {
