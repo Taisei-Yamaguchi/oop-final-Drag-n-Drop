@@ -1,8 +1,12 @@
+import { projectState } from "./ProjectState.js";
+
 export class ProjectList {
     templateElement: HTMLTemplateElement;
     hostElement: HTMLDivElement;
     element: HTMLElement;
     private type: 'active' | 'finished'; // Union type
+    assignedProjects: any[] = [];
+
 
     constructor(type: 'active' | 'finished') {
         this.type = type;
@@ -15,6 +19,11 @@ export class ProjectList {
 
         this.attach();
         this.renderContent();
+
+        projectState.addListener((projects: any[]) => {
+            this.assignedProjects = projects;
+            this.renderProjects();
+        });
     }
 
     private attach() {
@@ -27,5 +36,17 @@ export class ProjectList {
         list.id = listId;
         const heading = this.element.querySelector('h2')!;
         heading.textContent = `${this.type.toUpperCase()} PROJECTS`;
+    }
+
+
+    private renderProjects() {
+        const listElement = document.getElementById(`${this.type}-projects-list`) as HTMLUListElement;
+        listElement.innerHTML = ''; // Clear the list first
+
+        for (const project of this.assignedProjects) {
+            const listItem = document.createElement('li');
+            listItem.textContent = project.title;
+            listElement.appendChild(listItem);
+        }
     }
 }
