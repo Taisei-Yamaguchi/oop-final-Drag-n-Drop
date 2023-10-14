@@ -1,41 +1,31 @@
 import { projectState } from "./ProjectState.js";
 import {ProjectStatus,Project} from "../models/project.js";
+import { Component } from "./base-component.js"; 
 
-export class ProjectList {
-    templateElement: HTMLTemplateElement;
-    hostElement: HTMLDivElement;
-    element: HTMLElement;
-    private type: 'active' | 'finished'; // Union type
+export class ProjectList extends Component<HTMLDivElement, HTMLElement>{
     assignedProjects: Project[] = [];
 
 
-    constructor(type: 'active' | 'finished') {
-        this.type = type;
-        this.templateElement = document.getElementById("project-list") as HTMLTemplateElement;
-        this.hostElement = document.getElementById("app") as HTMLDivElement;
-
-        const importedNode = document.importNode(this.templateElement.content, true);
-        this.element = importedNode.firstElementChild as HTMLElement;
-        this.element.id = `${this.type}-projects`;
-
-        this.attach();
+    constructor(private type: 'active' | 'finished') {
+        super('project-list', 'app',`${type}-projects`);
+        // this.attach();
+        this.configure();
         this.renderContent();
+    }
 
+    configure() {
         projectState.addListener((projects: Project[]) => {
             this.assignedProjects = projects.filter((project) =>
                 this.type === 'active'
-                ? project.status === ProjectStatus.Active
-                : project.status === ProjectStatus.Finished
+                    ? project.status === ProjectStatus.Active
+                    : project.status === ProjectStatus.Finished
             );
             this.renderProjects();
         });
     }
 
-    private attach() {
-        this.hostElement.insertAdjacentElement("beforeend", this.element);
-    }
 
-    private renderContent() {
+    renderContent() {
         const listId = `${this.type}-projects-list`;
         const list = this.element.querySelector('ul')!;
         list.id = listId;

@@ -1,41 +1,16 @@
-// autobind decorator
-// function autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
-//     const originalMethod = descriptor.value;
-//     const adjustedDescriptor: PropertyDescriptor = {
-//         configurable: true,
-//         get() {
-//             const boundFn = originalMethod.bind(this);
-//             return boundFn;
-//         },
-//     };
-//     return adjustedDescriptor;
-// }
 import { validate, Validatable } from '../helpers/validation.js';
 import { projectState } from "./ProjectState.js";
+import { Component } from "./base-component.js";
 
-export class ProjectInput {
-    templateElement: HTMLTemplateElement;
-    hostElement: HTMLDivElement;
-    element: HTMLFormElement;
-    // Inside ProjectInput class
+
+export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement>{
     private titleInputElement: HTMLInputElement;
     private descriptionInputElement: HTMLInputElement;
     private peopleInputElement: HTMLInputElement;
 
 
     constructor() {
-        this.templateElement = document.getElementById("project-input") as HTMLTemplateElement;
-        this.hostElement = document.getElementById("app") as HTMLDivElement;
-
-        // Get the content of the template
-        const importedNode = document.importNode(this.templateElement.content, true);
-        // Get the form element from the template
-        this.element = importedNode.firstElementChild as HTMLFormElement;
-        // Add a new id to the form
-        this.element.id = "user-input";
-        // Attach the form to the host element
-        this.attach();
-
+        super("project-input", "app", "user-input");
         // Inside ProjectInput constructor
         this.titleInputElement = this.element.querySelector("#title") as HTMLInputElement;
         this.descriptionInputElement = this.element.querySelector("#description") as HTMLInputElement;
@@ -44,16 +19,12 @@ export class ProjectInput {
 
     }
 
-    private attach() {
-        this.hostElement.insertAdjacentElement("afterbegin", this.element);
-    }
-    // Inside ProjectInput class
-    private configure() {
+    configure() {
         this.element.addEventListener("submit", this.submitHandler.bind(this));
     }
 
-    // Inside ProjectInput class
-    // @autobind
+    renderContent() {}
+    
     private submitHandler(event: Event) {
         event.preventDefault();
         const userInput = this.gatherUserInput();
