@@ -1,13 +1,14 @@
 import { validate, Validatable } from '../helpers/validation.js';
 import { projectState } from "./ProjectState.js";
 import { Component } from "./base-component.js";
+// import { ProjectItem } from './ProjectItem.js'; //try
 
 
 export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement>{
     private titleInputElement: HTMLInputElement;
     private descriptionInputElement: HTMLInputElement;
     private peopleInputElement: HTMLInputElement;
-
+    // private projectItem: ProjectItem; //try
 
     constructor() {
         super("project-input", "app", "user-input");
@@ -33,6 +34,8 @@ export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement>{
             // console.log(title, description, people);
             // Call the addProject method from projectState and pass the form input values
             projectState.addProject(title, description, people);
+
+            // this.projectItem=new ProjectItem('app',)
             this.clearInputs();
         }
     }
