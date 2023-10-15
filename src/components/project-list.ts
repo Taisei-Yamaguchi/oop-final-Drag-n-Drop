@@ -2,8 +2,9 @@ import { projectState } from "./ProjectState.js";
 import {ProjectStatus,Project} from "../models/project.js";
 import { Component } from "./base-component.js"; 
 import { ProjectItem } from "./ProjectItem.js";
+import { DragTarget } from "../helpers/drag-drop.js";
 
-export class ProjectList extends Component<HTMLDivElement, HTMLElement>{
+export class ProjectList extends Component<HTMLDivElement, HTMLElement> implements DragTarget{
     assignedProjects: Project[] = [];
 
 
@@ -23,6 +24,10 @@ export class ProjectList extends Component<HTMLDivElement, HTMLElement>{
             );
             this.renderProjects();
         });
+
+        this.element.addEventListener('dragover', this.dragOverHandler);
+        this.element.addEventListener('drop', this.dropHandler);
+        this.element.addEventListener('dragleave', this.dragLeaveHandler);
     }
 
 
@@ -44,5 +49,28 @@ export class ProjectList extends Component<HTMLDivElement, HTMLElement>{
             projectItem.renderContent(); // Render project details
             listElement.appendChild(projectItem.element); // Append the element to the list
         }
+    }
+
+    dragOverHandler(event: DragEvent): void {
+        event.preventDefault();
+        this.element.classList.add('droppable');
+    }
+
+    dropHandler(event: DragEvent): void {
+        event.preventDefault();
+        this.element.classList.remove('droppable');
+        const projectId = event.dataTransfer!.getData('text/plain');
+        // Do something with the projectId, e.g., update the project's status.
+        const project = this.assignedProjects.find((p) => p.id === projectId);
+
+        if (project) {
+            project.toggleStatus();
+            this.renderProjects();
+        }
+    }
+
+    dragLeaveHandler(event: DragEvent): void {
+        this.element.classList.remove('droppable');
+        console.log(event)
     }
 }
