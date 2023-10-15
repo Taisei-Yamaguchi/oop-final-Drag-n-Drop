@@ -1,6 +1,7 @@
 import { projectState } from "./ProjectState.js";
 import {ProjectStatus,Project} from "../models/project.js";
 import { Component } from "./base-component.js"; 
+import { ProjectItem } from "./ProjectItem.js";
 
 export class ProjectList extends Component<HTMLDivElement, HTMLElement>{
     assignedProjects: Project[] = [];
@@ -39,9 +40,9 @@ export class ProjectList extends Component<HTMLDivElement, HTMLElement>{
         listElement.innerHTML = ''; // Clear the list first
 
         for (const project of this.assignedProjects) {
-            const listItem = document.createElement('li');
-            listItem.textContent = project.title;
-            listElement.appendChild(listItem);
+            const projectItem = new ProjectItem(this.element.id, project); // Create ProjectItem instance
+            projectItem.renderContent(); // Render project details
+            listElement.appendChild(projectItem.element); // Append the element to the list
         }
     }
 }
