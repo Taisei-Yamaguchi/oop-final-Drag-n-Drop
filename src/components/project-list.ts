@@ -52,8 +52,11 @@ export class ProjectList extends Component<HTMLDivElement, HTMLElement> implemen
     }
 
     dragOverHandler(event: DragEvent): void {
-        event.preventDefault();
-        this.element.classList.add('droppable');
+        // event.preventDefault();
+        // this.element.classList.add('droppable');
+        if (event.dataTransfer?.types[0] === "text/plain") {
+            event.preventDefault();
+        }
     }
 
     dropHandler(event: DragEvent): void {

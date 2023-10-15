@@ -40,7 +40,7 @@ export class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> impl
 
     dragStartHandler(event: DragEvent): void {
         console.log('Drag Start');
-        event.dataTransfer!.setData('text/plain', this.project.id.toString());
+        event.dataTransfer!.setData('text/plain', this.project.id);
         event.dataTransfer!.effectAllowed = 'move';
     }
 
