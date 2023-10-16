@@ -3,6 +3,7 @@ import {ProjectStatus,Project} from "../models/project.js";
 import { Component } from "./base-component.js"; 
 import { ProjectItem } from "./ProjectItem.js";
 import { DragTarget } from "../helpers/drag-drop.js";
+// import { autobind } from "../helpers/autobind.js";
 
 export class ProjectList extends Component<HTMLDivElement, HTMLElement> implements DragTarget{
     assignedProjects: Project[] = [];
@@ -51,7 +52,8 @@ export class ProjectList extends Component<HTMLDivElement, HTMLElement> implemen
         }
     }
 
-    dragOverHandler(event: DragEvent): void {
+    // @autobind
+    dragOverHandler = (event: DragEvent): void =>{
         // event.preventDefault();
         // this.element.classList.add('droppable');
         if (event.dataTransfer?.types[0] === "text/plain") {
@@ -59,20 +61,20 @@ export class ProjectList extends Component<HTMLDivElement, HTMLElement> implemen
         }
     }
 
-    dropHandler(event: DragEvent): void {
+    // @autobind
+    dropHandler = (event: DragEvent): void =>{
         event.preventDefault();
+        console.log(this.element)
         this.element.classList.remove('droppable');
         const projectId = event.dataTransfer!.getData('text/plain');
         // Do something with the projectId, e.g., update the project's status.
-        const project = this.assignedProjects.find((p) => p.id === projectId);
-
-        if (project) {
-            project.toggleStatus();
-            this.renderProjects();
-        }
+        const newStatus =
+        this.type === "active" ? ProjectStatus.Active : ProjectStatus.Finished;
+        projectState.moveProject(projectId, newStatus);
     }
 
-    dragLeaveHandler(event: DragEvent): void {
+    // @autobind
+    dragLeaveHandler = (event: DragEvent): void =>{
         this.element.classList.remove('droppable');
         console.log(event)
     }
