@@ -1,4 +1,4 @@
-import {Project} from "../models/project.js";
+import {Project,ProjectStatus} from "../models/project.js";
 type Listener = (projects: Project[]) => void;
 
 export class ProjectState {
@@ -24,13 +24,26 @@ export class ProjectState {
             people
         );
         this.projects.push(newProject);
-        for (const listenerFn of this.listeners) {
-            listenerFn(this.projects.slice()); // Pass a copy of the projects array
-        }
+        this.updateListeners();
     }
 
     addListener(listenerFn: Listener) {
         this.listeners.push(listenerFn);
+    }
+
+    moveProject(id: string, newStatus: ProjectStatus) {
+        const foundProject = this.projects.find((project) => project.id === id);
+    
+        if (foundProject && foundProject.status !== newStatus) {
+            foundProject.status = newStatus;
+            this.updateListeners();
+        }
+    }
+
+    private updateListeners() {
+        for (const listenerFn of this.listeners) {
+            listenerFn(this.projects.slice());
+        }
     }
 }
 
