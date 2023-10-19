@@ -11,7 +11,6 @@ export class ProjectList extends Component<HTMLDivElement, HTMLElement> implemen
 
     constructor(private type: 'active' | 'finished') {
         super('project-list', 'app',`${type}-projects`);
-        // this.attach();
         this.configure();
         this.renderContent();
     }
@@ -52,10 +51,9 @@ export class ProjectList extends Component<HTMLDivElement, HTMLElement> implemen
         }
     }
 
+    //Different point2: arrow func make it easier to bind.
     // @autobind
     dragOverHandler = (event: DragEvent): void =>{
-        // event.preventDefault();
-        // this.element.classList.add('droppable');
         if (event.dataTransfer?.types[0] === "text/plain") {
             event.preventDefault();
         }

@@ -31,11 +31,8 @@ export class ProjectInput extends Component<HTMLDivElement, HTMLFormElement>{
         const userInput = this.gatherUserInput();
         if (Array.isArray(userInput)) {
             const [title, description, people] = userInput;
-            // console.log(title, description, people);
             // Call the addProject method from projectState and pass the form input values
             projectState.addProject(title, description, people);
-
-            // this.projectItem=new ProjectItem('app',)
             this.clearInputs();
         }
     }

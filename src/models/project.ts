@@ -19,10 +19,6 @@ class Project {
         this.status = ProjectStatus.Active; // Initialize status as Active
     }
 
-    // //switch Active and Finished
-    // toggleStatus() {
-    //     this.status = this.status === ProjectStatus.Active ? ProjectStatus.Finished : ProjectStatus.Active;
-    // }
 }
 
 export { Project, ProjectStatus };
